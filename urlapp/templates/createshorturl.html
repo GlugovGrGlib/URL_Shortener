@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+    {% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+<head>
+    <meta charset="UTF-8">
+    <title>URL Shortener</title>
+     <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+  <nav class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+  <p class="navbar-text navbar-right">Signed in as {{ current_user }} </p>
+          <div class="navbar-header">
+           <a class="navbar-brand" href="/">URL shortener</a>
+      </div>
+      <div class="collapse navbar-collapse" >
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/">Create short URL <span class="sr-only">(current)</span></a></li>
+          <li ><a href="/manage">Manage URLs</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+    <div class="container-fluid">
+      <h3 class="text-center" >Create short URL:</h3>
+<div id="createshorturl">
+<form action="" method="post">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+<div class="row well">
+<div class="col-md-1"></div>
+<div class= "col-md-5"> {{ form.url.errors }}
+    <!--<label for="{{ form.url.id_for_label }}">Long URL:</label>-->
+    {{ form.url }}</div>
+
+<div class= "col-md-3"> {{ form.short_url.errors }}
+      <!--  <label for="{{ form.short_url.id_for_label }}">Short URL:</label>-->
+        {{ form.short_url }}</div>
+
+<div class= "col-md-2"> <input type="submit" class="btn btn-primary" value="Create short URL"></div>
+</div>
+
+</form>
+
+</div>
+<div id="latest_urls" class="row">
+  <h3 class="text-center" >5 latest URLs:</h3>
+
+{% if latest_urls_list %}
+<table class="table table-striped table-hover table-sm">
+<thead> <tr>
+      <th>№</th>
+      <th>URL</th>
+      <th>Short URL</th>
+      <th>Text</th>
+      <th>Clicks</th>
+      <th>Created</th>
+  </tr>
+  </thead>
+{% for url in latest_urls_list %}
+
+
+    <tr>
+  <td class="col-md-1"></td>
+      <td class="col-md-3"><a href="{{ url.url }}">{{ url.url }}</a></td>
+      <td class="col-md-2"><a href="/{{url.short_url }}">{{ request.META.HTTP_HOST}}/{{url.short_url }}</a></td>
+      <td calss="col-md-3">{{ url.text_message }}</td>
+      <td class="col-md-1">{{ url.click_count }}</td>
+      <td class="col-md-2">{{ url.add_date }}</td>
+    </tr>
+    {% endfor %}
+
+    </table>
+{% else %}
+    <p align="center" class="text-danger">No short urls were created.</p>
+{% endif %}
+
+  </div>
+<!--  <div class="row">
+    <div class="col-md-4"></div>
+
+    <div class="col-md-4">
+      <a href = "{% url 'manage'%}"><button id="viewallbtn" type="button" class="btn btn-primary  btn-block">Manage URLs</button></a>
+    </div>
+</div>-->
+</div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+    {% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+<head>
+    <meta charset="UTF-8">
+    <title>URL Shortener</title>
+     <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<body>
+<nav class="navbar navbar-inverse navbar-default navbar-fixed-top">
+  <div class="container">
+<p class="navbar-text navbar-right">Signed in as {{ current_user }} </p>
+        <div class="navbar-header">
+         <a class="navbar-brand" href="/">URL shortener</a>
+    </div>
+    <div class="collapse navbar-collapse" >
+      <ul class="nav navbar-nav">
+        <li ><a href="/">Create short URL <span class="sr-only">(current)</span></a></li>
+        <li class="active"><a href="/manage">Manage URLs</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container-fluid">
+      <div id="all_urls" class="row">
+        <h3 class="text-center" >Manage URLs:</h3>
+
+      {% if urls_list %}
+      <table class="table tablesorter table-striped table-hover table-sm">
+      <thead>
+         <tr>
+            <th>№</th>
+            <th>URL</th>
+            <th>Short URL</th>
+            <th>Text</th>
+            <th>Clicks</th>
+            <th>Created</th>
+            <th>Action</th>
+
+        </tr>
+        </thead>
+      <tbody>
+      {% for url in urls_list %}
+
+          <tr>
+            <td ></td>
+            <td class="col-md-2"><a href="{{ url.url }}">{{ url.url }}</a></td>
+            <td class="col-md-2"><a href="/{{url.short_url }}">{{ request.META.HTTP_HOST}}/{{url.short_url }}</a></td>
+            <td calss="col-md-3">{{ url.text_message }}</td>
+            <td class="col-md-1">{{ url.click_count }}</td>
+            <td class="col-md-2">{{ url.add_date }}</td>
+            <td class="col-md-1">
+                      <a href= "{%url 'info' url.id%}"><div class="btn btn-sm btn-default" ><i class="icon-trash glyphicon glyphicon-edit text-primary"></i></div></a>
+                      <a href="{% url 'delete' url.id%}"><div class="btn btn-sm btn-default"><i class="icon-trash glyphicon glyphicon-trash text-danger"></i></div></a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+
+          </table>
+      {% else %}
+          <p align="center" class="text-danger">No short urls were created.</p>
+      {% endif %}
+      <div class='col-md-5'> </div>
+      <div class="pagination col-md-5">
+          <span class="step-links">
+              {% if urls_list.has_previous %}
+                  <a href="?page=1">&laquo; first</a>
+                  <a href="?page={{ urls_list.previous_page_number }}">previous</a>
+              {% endif %}
+
+              <span class="current">
+                  Page {{ urls_list.number }} of {{ urls_list.paginator.num_pages }}
+              </span>
+
+              {% if urls_list.has_next %}
+                  <a href="?page={{ urls_list.next_page_number }}">next</a>
+                  <a href="?page={{ urls_list.paginator.num_pages }}">last &raquo;</a>
+              {% endif %}
+          </span>
+      </div>
+
+        </div>
+
+</div>
+
+</body>
+</html>
