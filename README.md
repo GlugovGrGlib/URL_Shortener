@@ -1,13 +1,12 @@
-# URL_Shortener
+# URL Shortener
 Django app on Django development server to short your long URLs
 
 
-##Prerequisites
-
+## Prerequisites
 You may need Docker and Docker-compose installed
 
 
-## Running
+## Launching
 
 To run the project for first time: go to project folder in your shell and run
 
@@ -24,9 +23,3 @@ After built you will have running app on http://localhost:8000
   - Store text from the first html-tag(p, span, h1-h6, td) on page
 
   also it has Creation API created with DjangoRestFramework (to access it go to  http://localhost:8000/api/create)
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
