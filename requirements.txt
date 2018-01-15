@@ -1,1 +1,4 @@
- Django>=1.8,<=2.0
+Django>=1.8,<=2.0
+lxml
+requests
+djangorestframework

@@ -9,16 +9,21 @@ from urllib.parse import urlparse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from random import randint
 import random, string
+from lxml import html
+import requests
+from .serializers import *
+from rest_framework import generics
 
 def shorturlcreation(request):
     deleteoldrecords()
     if request.method == 'POST':
         form = URLForm(request.POST)
         if form.is_valid():
+            text_content = getcontent(form.cleaned_data['url'])
             if form.cleaned_data['short_url']=="":
-                u = Urls(url=form.cleaned_data['url'],short_url=generateshorturl(), text_message="None", click_count=0, add_date=timezone.now())
+                u = Urls(url=form.cleaned_data['url'],short_url=generateshorturl(), text_message=text_content, click_count=0, add_date=timezone.now())
             else:
-                u = Urls(url=form.cleaned_data['url'],short_url=form.cleaned_data['short_url'], text_message="None", click_count=0, add_date=timezone.now())
+                u = Urls(url=form.cleaned_data['url'],short_url=form.cleaned_data['short_url'], text_message=text_content, click_count=0, add_date=timezone.now())
             u.save()
             return HttpResponseRedirect('')
     else:
@@ -36,6 +41,28 @@ def generateshorturl():
             temp = Urls.objects.get(short_url=short_url)
         except:
             return short_url
+
+def getcontent(URL):
+    page = requests.get(URL)
+    tree = html.fromstring(page.content)
+    text = tree.xpath('//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6 or self::p or self::span]/text()')[0]
+    text_list = text.split()
+    for x in range(len(text_list)):
+        if len(text_list[x])==6:
+            tmp_list = text_list[x].split()
+            tmp_list.append('\u2122')
+            text_list[x] = ''.join(tmp_list)
+    content = ' '.join(text_list)
+    return content
+
+class CreateView(generics.ListCreateAPIView):
+    """This class defines the create behavior of our rest api."""
+    queryset = Urls.objects.all()
+    serializer_class = UrlsSerializer
+
+    def perform_create(self, serializer):
+        """Save the post data when creating a new bucketlist."""
+        serializer.save()
 
 def details(request, url_id):
     full_url = get_object_or_404(Urls, pk=url_id)
