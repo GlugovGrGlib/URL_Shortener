@@ -43,25 +43,27 @@ def generateshorturl():
             return short_url
 
 def getcontent(URL):
-    page = requests.get(URL)
-    tree = html.fromstring(page.content)
-    text = tree.xpath('//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6 or self::p or self::span]/text()')[0]
-    text_list = text.split()
-    for x in range(len(text_list)):
-        if len(text_list[x])==6:
-            tmp_list = text_list[x].split()
-            tmp_list.append('\u2122')
-            text_list[x] = ''.join(tmp_list)
-    content = ' '.join(text_list)
-    return content
+    try:
+        page = requests.get(URL)
+        tree = html.fromstring(page.content)
+        text = tree.xpath('//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6 or self::p or self::span or self::td]/text()')[0]
+        text_list = text.split()
+        for x in range(len(text_list)):
+            if len(text_list[x])==6:
+                tmp_list = text_list[x].split()
+                tmp_list.append('\u2122')
+                text_list[x] = ''.join(tmp_list)
+        content = ' '.join(text_list)
+        return content
+    except:
+        return "None"
+
 
 class CreateView(generics.ListCreateAPIView):
-    """This class defines the create behavior of our rest api."""
     queryset = Urls.objects.all()
     serializer_class = UrlsSerializer
 
     def perform_create(self, serializer):
-        """Save the post data when creating a new bucketlist."""
         serializer.save()
 
 def details(request, url_id):

@@ -28,7 +28,13 @@ h1 {
 table
 {
     border-collapse: separate;
+
 }
+tr {
+     height: 70px;
+    }
+th, td {
+text-overflow : ellipsis;}
 
 
 tr td:first-child:before
