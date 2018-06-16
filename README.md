@@ -1,5 +1,5 @@
 # URL Shortener
-Django app on Django development server to short your long URLs
+Django app on Django development server and IBM Cloud http://nuredjangobluemix.eu-gb.mybluemix.net/ to short your long URLs
 
 
 ## Prerequisites
