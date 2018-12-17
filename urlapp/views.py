@@ -33,7 +33,7 @@ def shorturlcreation(request):
     return render(request, 'createshorturl.html', context)
 
 def generateshorturl():
-    length = randint(5,8)
+    length = randint(5, 8)
     char = string.ascii_uppercase + string.digits + string.ascii_lowercase
     while True:
         short_url = ''.join(random.choice(char) for x in range(length))
